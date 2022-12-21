@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Booking>
+
+@{
+ 
+}
+ @if(ViewBag.Msg != null)
+{
+    <font color="blue"><h3>@ViewBag.Msg</h3></font>
+}
+
+
+<h1>Active Booking History</h1>
+ @if(Model.Any())
+ {
+    <table border="1">
+        <tr><th>Start Date</th><th>End Date</th></tr>
+    @foreach(var item in Model)
+    {
+       <tr><td>@item.StartDate</td><td>@item.EndDate</td><td><a asp-controller="Room" asp-action="cancel" asp-route-Id = "@item.Id">Cancel Booking</a></td></tr> 
+    }
+    </table>
+ }
+ else
+ {
+     <h1>There is no active booking at this time</h1>
+ }

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Room>
+<h1>Room View</h1>
+
+@if (Model == null)
+{
+    <div>
+        <h3>Room View</h3>
+    </div>    
+}
+else
+{
+
+<div class="card-deck">
+        @foreach (var item in Model)
+        {
+            <div class="card m-3" style="min-width: auto; max-width:auto">
+                <div class="card-header">
+                    <h2>@item.RoomName</h2>              
+                </div>
+                <div class="card-body">
+
+                    <h3>Room Details</h3>
+                    <h4>Have a Virtual Tour of the Room.....</h4>
+                     <iframe id="panoee-tour-embeded" name="Executive Room" src=" https://app.cloudpano.com/tours/Z1aC9RQ81" frameBorder="0" width="100%" height="400px" scrolling="no" allowvr="yes" allow="vr; xr; accelerometer; gyroscope; autoplay;" allowFullScreen="false" webkitallowfullscreen="false" mozallowfullscreen="false" loading="eager"></iframe>
+                    <form>
+                        <span><label asp-for="@item.HasSwimmingPool" class="col-sm-4 col-form-label"></label>
+                            <input asp-for="@item.HasSwimmingPool" readonly class="form-control" value = "@item.HasSwimmingPool"></span>
+
+                        <label asp-for="@item.HasWifi" class="col-sm-4 col-form-label"></label>
+                        <input asp-for="@item.HasWifi" readonly class="form-control" value = "@item.HasWifi">
+
+                        <label asp-for="@item.IsBreakfastInluded" class="col-sm-4 col-form-label"></label>
+                        <input asp-for="@item.IsBreakfastInluded" readonly class="form-control" value = "@item.IsBreakfastInluded">
+
+                        <label asp-for="@item.NumberofBed" class="col-sm-4 col-form-label"></label>
+                        <input asp-for="@item.NumberofBed" readonly class="form-control" value = "@item.NumberofBed">
+
+                        <label asp-for="@item.Price" class="col-sm-4 col-form-label"></label>
+                        <input asp-for="@item.Price" readonly class="form-control" value = "@item.Price" id="pr">
+                    </form>
+                </div>
+                <!--  <img class="card-img-top" src="~/images/" /> -->
+                <div class="card-footer text-center">
+                    <a class="btn btn-primary" asp-controller = "CustomerDashBoard" asp-action="BookRoom" asp-route-price ="@item.Price" asp-route-id= "@item.Id" >Book</a>
+                    <button type="button" id="ModalButton" >Check for discounted rooms</button>
+                </div>
+                <div id="userModel" class="modal fade" data-url='@Url.Action("ShowModal")'>
+                    <div id="userContainer"></div>
+                </div>
+
+
+            </div>
+        }
+
+</div>
+}
+
+
+
+@section Scripts{
+    <script>
+        $("#ModalButton").click(function(){
+            var url = $("#userModel").data("url");
+            var pr1 = $('#pr').val();
+
+            $.ajax({ 
+                url:url,
+                data: "Price=" + pr1,
+                type: 'GET',
+                success: function(res) {
+                    $("#userContainer").html(res);
+                    $("#userModel").modal("show");
+                },
+                failure: function(res) {
+                    alert(response.responseText);
+                },
+                error: function(res) {
+                    alert(response.responseText);
+                }
+            })
+        })
+
+         
+        var pano_iframe_name = "panoee-tour-embeded";
+        window.addEventListener("devicemotion", function(e){ var iframe = document.getElementById(pano_iframe_name); if (iframe) iframe.contentWindow.postMessage({ type:"devicemotion", deviceMotionEvent:{ acceleration:{ x:e.acceleration.x, y:e.acceleration.y, z:e.acceleration.z }, accelerationIncludingGravity:{ x:e.accelerationIncludingGravity.x, y:e.accelerationIncludingGravity.y, z:e.accelerationIncludingGravity.z }, rotationRate:{ alpha:e.rotationRate.alpha, beta:e.rotationRate.beta, gamma:e.rotationRate.gamma }, interval:e.interval, timeStamp:e.timeStamp } }, "*"); });
+      
+
+    </script>
+}
+
+

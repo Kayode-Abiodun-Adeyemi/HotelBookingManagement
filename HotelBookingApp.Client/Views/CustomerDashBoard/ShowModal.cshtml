@@ -1,0 +1,19 @@
+﻿@{
+    Layout = null;
+    var mode1 = ViewBag.Result;
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body">       
+           <div><h3>Suggested discounted Room(s):</h3></div>
+        </div>
+        <div>
+            <h3>Room Name: @mode1.RoomName</h3>
+            <h3>Price:@mode1.Price</h3>
+        </div>
+        <div>
+             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
